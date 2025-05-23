@@ -14,6 +14,10 @@ let package = Package(
     platforms: [.iOS(.v17)],
     products: [
         .library(
+            name: "DefaultStorageDirectory",
+            targets: ["DefaultStorageDirectory"]
+        ),
+        .library(
             name: "CameraPickerFeature",
             targets: ["CameraPickerFeature"]
         ),
