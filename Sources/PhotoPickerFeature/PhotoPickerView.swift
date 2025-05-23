@@ -1,0 +1,53 @@
+//
+//  PhotoPickerView.swift
+//  ComposableMediaPicker
+//
+//  Created by Ratnesh Jain on 23/05/25.
+//
+
+
+import ComposableArchitecture
+import Foundation
+import PhotosUI
+import SwiftUI
+import UniformTypeIdentifiers
+
+public struct PhotoPickerViesw: UIViewControllerRepresentable {
+    let store: StoreOf<PhotoPickerFeature>
+    
+    public init(store: StoreOf<PhotoPickerFeature>) {
+        self.store = store
+    }
+    
+    public func makeUIViewController(context: Context) -> PHPickerViewController {
+        var configuration = PHPickerConfiguration()
+        configuration.selectionLimit = store.allowMultipleSelection ? 0 : 1
+        configuration.filter = store.filter
+        let controller = PHPickerViewController(configuration: configuration)
+        controller.delegate = context.coordinator
+        return controller
+    }
+    
+    public func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {}
+    
+    public func makeCoordinator() -> Coordinator {
+        Coordinator(store: self.store)
+    }
+    
+    final public class Coordinator: NSObject, PHPickerViewControllerDelegate {
+        let store: StoreOf<PhotoPickerFeature>
+        
+        init(store: StoreOf<PhotoPickerFeature>) {
+            self.store = store
+        }
+        
+        public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+            store.send(.system(.didPick(result: results, picker: picker)))
+        }
+        
+        public func pickerDidCancel(_ picker: PHPickerViewController) {
+            store.send(.user(.cancelButtonTapped))
+            picker.dismiss(animated: true)
+        }
+    }
+}
