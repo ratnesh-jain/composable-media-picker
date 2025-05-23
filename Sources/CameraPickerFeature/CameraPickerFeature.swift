@@ -16,9 +16,11 @@ public struct CameraPickerFeature: Sendable {
     @ObservableState
     public struct State: Equatable {
         let sourceType: UIImagePickerController.SourceType
+        let allowsEditing: Bool
         
-        public init(sourceType: UIImagePickerController.SourceType = .camera) {
+        public init(sourceType: UIImagePickerController.SourceType = .camera, allowsEditing: Bool = false) {
             self.sourceType = sourceType
+            self.allowsEditing = allowsEditing
         }
     }
     
