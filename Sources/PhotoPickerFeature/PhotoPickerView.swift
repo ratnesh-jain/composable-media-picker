@@ -12,7 +12,7 @@ import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 
-public struct PhotoPickerViesw: UIViewControllerRepresentable {
+public struct PhotoPickerView: UIViewControllerRepresentable {
     let store: StoreOf<PhotoPickerFeature>
     
     public init(store: StoreOf<PhotoPickerFeature>) {
