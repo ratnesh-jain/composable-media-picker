@@ -25,6 +25,10 @@ let package = Package(
             name: "PhotoPickerFeature",
             targets: ["PhotoPickerFeature"]
         ),
+        .library(
+            name: "DocumentScannerFeature",
+            targets: ["DocumentScannerFeature"]
+        ),
     ],
     dependencies: [
         .package(
@@ -44,6 +48,10 @@ let package = Package(
         .target(
             name: "PhotoPickerFeature",
             dependencies: ["DefaultStorageDirectory"]
+        ),
+        .target(
+            name: "DocumentScannerFeature",
+            dependencies: [.tca]
         ),
     ]
 )

@@ -5,7 +5,7 @@
 //  Created by Ratnesh Jain on 23/05/25.
 //
 
-
+#if os(iOS)
 import ComposableArchitecture
 import Foundation
 import PhotosUI
@@ -51,3 +51,4 @@ public struct PhotoPickerView: UIViewControllerRepresentable {
         }
     }
 }
+#endif

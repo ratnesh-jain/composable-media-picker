@@ -40,6 +40,7 @@ public struct CameraPickerFeature: Sendable {
     
     @Dependency(\.dismiss) private var dismiss
     @Dependency(\.defaultStorageDirectory) private var storageDirectory
+    @Dependency(\.uuid) private var uuid
     
     public init() {}
     
@@ -58,7 +59,7 @@ public struct CameraPickerFeature: Sendable {
                 
             case .user(.saveButtonTapped(let image)):
                 guard let data = image.jpegData(compressionQuality: 0.1) else { return .none }
-                let url = storageDirectory.appending(path: "\(UUID().uuidString).png")
+                let url = storageDirectory.appending(path: "\(uuid().uuidString).png")
                 let path = url.lastPathComponent
                 return .run { send in
                     try data.write(to: url)
