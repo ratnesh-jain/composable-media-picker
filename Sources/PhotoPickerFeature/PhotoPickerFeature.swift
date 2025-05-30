@@ -35,7 +35,7 @@ public struct PhotoPickerFeature: Sendable {
         
         public enum SystemAction: Equatable {
             case didFinishPicking([URL])
-            case didPick(result: [PHPickerResult], picker: PHPickerViewController)
+            case didPick(result: [PHPickerResult])
         }
         
         case delegate(DelegateAction)
@@ -54,12 +54,11 @@ public struct PhotoPickerFeature: Sendable {
             case .delegate:
                 return .none
                 
-            case .system(.didPick(let results, let picker)):
+            case .system(.didPick(let results)):
                 let results = PhotoPickerResultSendable(results: results, storageDirectory: storageDirectory)
                 return .run { send in
                     let urls = try await results.allImages()
                     await send(.system(.didFinishPicking(urls)))
-                    await picker.dismiss(animated: true)
                 }
                 
             case .system(.didFinishPicking(let urls)):

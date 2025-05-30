@@ -42,7 +42,7 @@ public struct PhotoPickerView: UIViewControllerRepresentable {
         }
         
         public func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            store.send(.system(.didPick(result: results, picker: picker)))
+            store.send(.system(.didPick(result: results)))
         }
         
         public func pickerDidCancel(_ picker: PHPickerViewController) {
