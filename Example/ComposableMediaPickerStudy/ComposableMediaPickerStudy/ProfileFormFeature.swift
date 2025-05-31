@@ -56,23 +56,11 @@ struct ProfileFormFeature {
                 return .none
                 
             case .destination(.presented(.scanner(.delegate(.didScanImages(let images))))):
-                return .run { send in
-                    let urls = try await withThrowingTaskGroup(of: [URL].self) { group in
-                        for image in images {
-                            group.addTask {
-                                let destinationURL = storageDirectory.appending(path: uuid().uuidString.appending(".png"))
-                                try image.pngData()?.write(to: destinationURL)
-                                return [destinationURL]
-                            }
-                        }
-                        var urls: [URL] = []
-                        for try await url in group {
-                            urls.append(contentsOf: url)
-                        }
-                        return urls
-                    }
-                    await send(.system(.didReceiveScannedImages(urls)))
-                }
+                print("received images: \(images)")
+                return .none
+                
+            case .destination(.presented(.scanner(.delegate(.didScanImagesURLs(let urls))))):
+                return .send(.system(.didReceiveScannedImages(urls)))
                 
             case .destination:
                 return .none
@@ -86,11 +74,11 @@ struct ProfileFormFeature {
                 return .none
                 
             case .user(.photoButtonTapped):
-                state.destination = .photo(.init(allowMultipleSelection: true))
+                state.destination = .photo(.init(selection: .multiple(limit: 0)))
                 return .none
                 
             case .user(.scannerButtonTapped):
-                state.destination = .scanner(.init())
+                state.destination = .scanner(.init(output: .localURLs))
                 return .none
             }
         }
