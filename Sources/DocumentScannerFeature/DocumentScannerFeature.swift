@@ -126,6 +126,7 @@ public struct DocumentScannerFeature: Sendable {
                             return urls
                         }
                         await send(.delegate(.didScanImagesURLs(urls)))
+                        await dismiss()
                     }
                 }
             case .system(.receiveError(let error)):
