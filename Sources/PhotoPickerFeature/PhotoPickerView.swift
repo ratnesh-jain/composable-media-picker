@@ -12,16 +12,18 @@ import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// SwiftUI wrapper for `PHPickerViewController`.
 public struct PhotoPickerView: UIViewControllerRepresentable {
     let store: StoreOf<PhotoPickerFeature>
     
+    /// Accepts a `PhotoPickerFeature` store.
     public init(store: StoreOf<PhotoPickerFeature>) {
         self.store = store
     }
     
     public func makeUIViewController(context: Context) -> PHPickerViewController {
         var configuration = PHPickerConfiguration()
-        configuration.selectionLimit = store.allowMultipleSelection ? 0 : 1
+        configuration.selectionLimit = store.selection.limit
         configuration.filter = store.filter
         let controller = PHPickerViewController(configuration: configuration)
         controller.delegate = context.coordinator

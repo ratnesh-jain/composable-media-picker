@@ -11,19 +11,40 @@ import Foundation
 import PhotosUI
 import UniformTypeIdentifiers
 
+/// Photo Picker Feature for selecting the images from the Photo's App.
 @Reducer
 public struct PhotoPickerFeature: Sendable {
+    
+    /// Image Selection option.
+    ///
+    /// **Note**: Please use `multiple(limit: 0)` for no limit selection.
+    public enum Selection: Equatable, Sendable {
+        case single
+        case multiple(limit: Int)
+        
+        var limit: Int {
+            switch self {
+            case .single:
+                return 1
+            case .multiple(let limit):
+                return limit
+            }
+        }
+    }
+    
+    /// Single source of truth for the UI State.
     @ObservableState
     public struct State: Equatable {
-        let allowMultipleSelection: Bool
+        let selection: Selection
         var filter: PHPickerFilter?
         
-        public init(allowMultipleSelection: Bool, filter: PHPickerFilter? = .images) {
-            self.allowMultipleSelection = allowMultipleSelection
+        public init(selection: Selection, filter: PHPickerFilter? = .images) {
+            self.selection = selection
             self.filter = filter
         }
     }
     
+    /// Declaration of Action Performed by User, System Events and Delegate calls.
     public enum Action: Equatable {
         public enum DelegateAction: Equatable {
             case didPicked([URL])
@@ -48,6 +69,7 @@ public struct PhotoPickerFeature: Sendable {
     
     public init() {}
     
+    /// Performs the business logic for defined `Actions`.
     public var body: some ReducerOf<Self> {
         Reduce<State, Action> { state, action in
             switch action {
@@ -76,6 +98,7 @@ public struct PhotoPickerFeature: Sendable {
     }
 }
 
+/// Since `PHPickerResult` is not yet sendable so ignoring the Sendablity check and get all Image output.
 class PhotoPickerResultSendable: @unchecked Sendable {
     let results: [PHPickerResult]
     let storageDirectory: URL
