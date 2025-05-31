@@ -51,7 +51,7 @@ let package = Package(
         ),
         .target(
             name: "DocumentScannerFeature",
-            dependencies: [.tca]
+            dependencies: ["DefaultStorageDirectory"]
         ),
     ]
 )
